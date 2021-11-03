@@ -2,6 +2,8 @@ const express = require("express");
 
 const morgan = require("morgan");
 
+const cors = require("cors");
+
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -10,10 +12,12 @@ let users = [];
 
 app.use(express.json());
 
+app.use(cors());
+
 app.use(morgan("short"));
 
 app.use((req, res, next) => {
-  console.log("a request came", req.body);
+  console.log("Request Came", req.body);
   next();
 });
 
@@ -30,13 +34,13 @@ app.get("/user/:id", (req, res) => {
   if (users[req.params.id]) {
     res.send(users[req.params.id]);
   } else {
-    res.send("user not found");
+    res.send("User Not Found");
   }
 });
 
 app.post("/user", (req, res) => {
   if (!req.body.name || !req.body.email || !req.body.address) {
-    res.status(400).send("Invalid data");
+    res.status(400).send("Invalid Data");
   } else {
     users.push({
       name: req.body.name,
@@ -44,16 +48,12 @@ app.post("/user", (req, res) => {
       address: req.body.address,
     });
 
-    res.send("users created");
+    res.send("users Created");
   }
 });
 
-app.get("/home", (req, res) => {
-  res.send("here is your home");
-});
-
 app.get("/", (req, res) => {
-  res.send("Hi I am a hello world Server program");
+  res.send("Hi I am a Hamza Ilyas Server Program");
 });
 
 app.listen(port, () => {
